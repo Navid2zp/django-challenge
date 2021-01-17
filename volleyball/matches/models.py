@@ -22,9 +22,9 @@ class MatchSeat(models.Model):
     row = models.ForeignKey(StadiumSeatRow, null=False, blank=False, on_delete=models.CASCADE)
     seat_number = models.PositiveIntegerField(null=False, blank=False, default=1)
     price = models.PositiveIntegerField(null=False, blank=False, default=1000)
-    locked_for = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    locked_for = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="seat_locks")
     lock_expiration = models.DateTimeField(null=True, blank=True)
-    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="seats")
 
     class Meta:
         unique_together = [
