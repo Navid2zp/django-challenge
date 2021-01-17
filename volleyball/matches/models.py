@@ -26,6 +26,13 @@ class MatchSeat(models.Model):
     lock_expiration = models.DateTimeField(null=True, blank=True)
     owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="seats")
 
+    def verify_reservation(self):
+        self.owner = self.locked_for
+        self.lock_expiration = None
+        self.save()
+
+        # And then send a notification to clients notifying them that this seat is no longer available
+
     class Meta:
         unique_together = [
             ['row', 'seat_number', 'match']  # a seat position is unique
