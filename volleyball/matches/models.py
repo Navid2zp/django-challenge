@@ -18,6 +18,10 @@ class Match(models.Model):
 
 
 class MatchSeat(models.Model):
+    """
+    Each match seat represents an available seat for the given match in the stadium
+    Price can be different for each seat.
+    """
     match = models.ForeignKey(Match, null=False, blank=False, on_delete=models.CASCADE, related_name="seats")
     row = models.ForeignKey(StadiumSeatRow, null=False, blank=False, on_delete=models.CASCADE)
     seat_number = models.PositiveIntegerField(null=False, blank=False, default=1)
@@ -27,6 +31,9 @@ class MatchSeat(models.Model):
     owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="seats")
 
     def verify_reservation(self):
+        """
+        Set seat owner so seat won't be available on the match seat list.
+        """
         self.owner = self.locked_for
         self.lock_expiration = None
         self.save()
