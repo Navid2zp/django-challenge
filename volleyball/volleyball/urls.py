@@ -41,6 +41,7 @@ urlpatterns = [
     # v1 APIs
     path('api/v1/auth/', include("authentication.api.urls", namespace="auth-api")),
     path('api/v1/stadiums/', include("stadiums.api.urls", namespace="stadiums-api")),
+    path('api/v1/matches/', include("matches.api.urls", namespace="matches-api")),
 
     # swagger endpoints
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
