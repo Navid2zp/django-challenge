@@ -25,10 +25,15 @@ class SeatReservationAPI(APIView):
 
     @staticmethod
     def get_payment_url() -> str:
+        """
+        Generate a payment url for the seat.
+        :return: str - payment url
+        """
         return ""
 
     def patch(self, request, *args, **kwargs):
         try:
+            # Reserve the seat
             MatchSeat.objects.filter(
                 Q(Q(locked_for__isnull=True) | Q(lock_expiration__lt=timezone.now()))
                 , id=self.kwargs["seat_id"]
