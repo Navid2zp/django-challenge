@@ -1,9 +1,9 @@
-from rest_framework.generics import ListCreateAPIView, get_object_or_404
+from rest_framework.generics import ListCreateAPIView
 
-from stadiums.api.paginations import StadiumLimitOffsetPagination
-from stadiums.api.permission import StadiumCreatePermission
 from stadiums.api.serializers import StadiumSerializer
 from stadiums.models import Stadium
+from volleyball.api.paginations import DefaultLimitOffsetPagination
+from volleyball.api.permissions import DefaultCreatePermission
 
 
 class StadiumAPI(ListCreateAPIView):
@@ -15,6 +15,6 @@ class StadiumAPI(ListCreateAPIView):
     # Separating them will also help with a better auto api documentation generation
 
     serializer_class = StadiumSerializer
-    permission_classes = [StadiumCreatePermission]
+    permission_classes = [DefaultCreatePermission]
     queryset = Stadium.objects.all()
-    pagination_class = StadiumLimitOffsetPagination
+    pagination_class = DefaultLimitOffsetPagination
