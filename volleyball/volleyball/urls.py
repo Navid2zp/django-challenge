@@ -37,6 +37,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # v1 APIs
     path('api/v1/auth/', include("authentication.api.urls", namespace="auth-api")),
+    path('api/v1/stadiums/', include("stadiums.api.urls", namespace="stadiums-api")),
+
+    # swagger endpoints
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

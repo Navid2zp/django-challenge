@@ -22,7 +22,7 @@ def stadium_view_dir_path(instance: Stadium, filename: str) -> str:
 
 
 class StadiumSeat(models.Model):
-    stadium = models.ForeignKey(Stadium, null=False, blank=False, on_delete=models.CASCADE)
+    stadium = models.ForeignKey(Stadium, null=False, blank=False, on_delete=models.CASCADE, related_name="seats")
     seat_code = models.PositiveIntegerField(null=False, blank=False)
     view = models.ImageField(null=True, blank=True, upload_to=stadium_view_dir_path)
 
