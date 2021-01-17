@@ -1,9 +1,9 @@
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, get_object_or_404
 
 from stadiums.api.paginations import StadiumLimitOffsetPagination
 from stadiums.api.permission import StadiumCreatePermission
-from stadiums.api.serializers import StadiumSerializer
-from stadiums.models import Stadium
+from stadiums.api.serializers import StadiumSerializer, StadiumSeatSerializer
+from stadiums.models import Stadium, StadiumSeat
 
 
 class StadiumAPI(ListCreateAPIView):
@@ -18,3 +18,26 @@ class StadiumAPI(ListCreateAPIView):
     permission_classes = [StadiumCreatePermission]
     queryset = Stadium.objects.all()
     pagination_class = StadiumLimitOffsetPagination
+
+
+class StadiumSeatsAPI(ListCreateAPIView):
+    serializer_class = StadiumSeatSerializer
+    permission_classes = [StadiumCreatePermission]
+    pagination_class = StadiumLimitOffsetPagination
+
+    def get_stadium_id(self):
+        return self.kwargs.get("stadium_id", 0)
+
+    def get_object(self):
+        return get_object_or_404(Stadium, id=self.get_stadium_id())
+
+    def get_queryset(self, *args, **kwargs):
+        return StadiumSeat.objects.filter(stadium=self.get_object())
+
+    def get_serializer_context(self):
+        """
+        Pass stadium object to serializer so we can access it there
+        :return: dict - serializer context data
+        """
+
+        return {"request": self.request, "stadium": self.get_object()}

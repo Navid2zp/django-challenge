@@ -9,7 +9,7 @@ class Stadium(models.Model):
         return f'{self.name} - Capacity: {self.capacity}'
 
 
-def stadium_view_dir_path(instance: Stadium, filename: str) -> str:
+def stadium_view_dir_path(instance, filename: str) -> str:
     """
     Separate directories for each stadium.
 
@@ -18,7 +18,7 @@ def stadium_view_dir_path(instance: Stadium, filename: str) -> str:
     :return: str - directory/filename.extension
     """
 
-    return f'stadium_{instance.id}/{filename}'
+    return f'stadium_{instance.stadium_id}/{filename}'
 
 
 class StadiumSeat(models.Model):
