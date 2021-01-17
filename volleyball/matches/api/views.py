@@ -1,11 +1,11 @@
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView, get_object_or_404
+from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from matches.api.serializers import MatchSerializer, AddSeatSerializer
-from matches.models import Match
+from matches.api.serializers import MatchSerializer, AddSeatSerializer, MatchSeatSerializer
+from matches.models import Match, MatchSeat
 from volleyball.api.paginations import DefaultLimitOffsetPagination
 from volleyball.api.permissions import DefaultCreatePermission
 
@@ -24,14 +24,14 @@ class MatchAPI(ListCreateAPIView):
     pagination_class = DefaultLimitOffsetPagination
 
 
-# class MatchDetailAPI(RetrieveAPIView):
-#
-#     serializer_class = MatchDetailSerializer
-#     queryset = Match.objects.all()
-#     pagination_class = DefaultLimitOffsetPagination
-#
-#     lookup_field = 'id'
-#     lookup_url_kwarg = 'match_id'
+class MatchSeatsAPI(ListAPIView):
+
+    serializer_class = MatchSeatSerializer
+    queryset = MatchSeat.objects.all()
+    pagination_class = DefaultLimitOffsetPagination
+
+    lookup_field = 'match_id'
+    lookup_url_kwarg = 'match_id'
 
 
 class MatchAddSeatAPI(APIView):

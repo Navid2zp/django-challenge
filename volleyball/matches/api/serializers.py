@@ -1,22 +1,33 @@
-from abc import ABC
-
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from matches.models import Match, MatchSeat
+from stadiums.api.serializers import StadiumSerializer
 from stadiums.models import StadiumSeatRow
 
 
 class MatchSerializer(ModelSerializer):
     """ Serializer responsible for generating matches list and creating one"""
 
+    stadium = StadiumSerializer()
+
     class Meta:
         model = Match
         fields = (
-            'id', 'stadium', 'team_a', 'team_b', 'start_time'
+            'id', 'stadium', 'team_a', 'team_b', 'start_time', 'stadium'
         )
         read_only_fields = ('id',)
+
+
+class MatchSeatSerializer(ModelSerializer):
+    """ Serializer responsible for generating matches list and creating one"""
+
+    class Meta:
+        model = MatchSeat
+        fields = (
+            'id', 'row', 'seat_number', 'price',
+        )
 
 
 class AddSeatSerializer(Serializer):
