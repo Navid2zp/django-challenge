@@ -1,3 +1,5 @@
+from django.db.models import Q
+from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, ListAPIView, get_object_or_404
@@ -28,16 +30,33 @@ class MatchAPI(ListCreateAPIView):
 
 class MatchSeatsAPI(ListAPIView):
     """
-    List of all the matches.
+    List of all the matches (state not included).
     Further filtering and options could be added by overriding the get_queryset method.
+    This method can be and should be fully cached since there is no state available on the result set.
+    This method should only be used to get the details for the available seats and not seats update/states.
     """
 
     serializer_class = MatchSeatSerializer
-    queryset = MatchSeat.objects.all()
     pagination_class = DefaultLimitOffsetPagination
 
-    lookup_field = 'match_id'
-    lookup_url_kwarg = 'match_id'
+    def get_queryset(self):
+        return MatchSeat.objects.filter(match_id=self.kwargs["match_id"])
+
+
+class MatchAvailableSeatsAPI(APIView):
+    """
+    Returns a flat list of all the seats that are available (only ids). Example: [1, 2, 6, 45, 61]
+    This endpoint should be called to get updates instead of calling the seats endpoint again and again.
+    Using a websocket to notify changes will be better idea but this method is fast enough for updating the frontend.
+    """
+
+    def get(self, request, match_id, *args, **kwargs):
+        seats = MatchSeat.objects.filter(
+            Q(Q(locked_for__isnull=True) | Q(lock_expiration__lt=timezone.now())),
+            match_id=match_id,
+            owner__isnull=True,
+        ).values_list("id", flat=True)
+        return Response(data=list(seats))
 
 
 class MatchAddSeatAPI(APIView):
@@ -78,4 +97,3 @@ class MatchAddSeatAPI(APIView):
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response(data, status=status.HTTP_201_CREATED)
-
