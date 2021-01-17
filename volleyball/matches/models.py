@@ -20,6 +20,7 @@ class MatchSeat(models.Model):
     match = models.ForeignKey(Match, null=False, blank=False, on_delete=models.CASCADE, related_name="seats")
     row = models.ForeignKey(StadiumSeatRow, null=False, blank=False, on_delete=models.CASCADE)
     seat_number = models.PositiveIntegerField(null=False, blank=False, default=1)
+    price = models.PositiveIntegerField(null=False, blank=False, default=1000)
 
     class Meta:
         unique_together = [
