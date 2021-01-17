@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'knox',
     'authentication',
     'stadiums',
-    'matches'
+    'matches',
+    'booking'
 ]
 
 MIDDLEWARE = [
